@@ -28,7 +28,10 @@ class HangpersonGame
     }
   end
   
-  def guess (l)
+  def guess(l)
+     if (!l.is_a? String) || !(/[a-zA-Z]/ =~ l) || (l.empty?)
+      raise ArgumentError.new("Guess must be a valid letter")
+    end
     l.downcase!
     if (@guesses.include? l) || (@wrong_guesses.include? l)
       @valid = false
@@ -45,7 +48,7 @@ class HangpersonGame
     end
   end 
   
-  def guess_several_letters (ls)
+  def guess_several_letters(ls)
     ls.split('').each do |l| guess(l) end
   end
 
