@@ -7,6 +7,9 @@
 <% end %>
 
 <p>
+  <img src="/hangman<%= @game.wrong_guesses.length %>.jpg" />
+</p>
+<p>
   Wrong Guesses:
   <span class="guesses"><%= @game.wrong_guesses %></span>
 </p>
