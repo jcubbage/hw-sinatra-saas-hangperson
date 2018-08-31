@@ -1,6 +1,6 @@
 class HangpersonGame
   attr_accessor :word, :guesses, :wrong_guesses
-  attr_reader :valid
+  attr_reader :valid, :word_with_guesses, :check_win_or_lose
   # add the necessary class methods, attributes, etc. here
   # to make the tests in spec/hangperson_game_spec.rb pass.
 
@@ -14,6 +14,8 @@ class HangpersonGame
     @guesses = ""
     @wrong_guesses = ""
     @valid = false
+    set_word_with_guesses()
+    @check_win_or_lose = :play
   end
 
   # You can test it by running $ bundle exec irb -I. -r app.rb
@@ -29,7 +31,7 @@ class HangpersonGame
   end
   
   def guess(l)
-     if (!l.is_a? String) || !(/[a-zA-Z]/ =~ l) || (l.empty?)
+    if (!l.is_a? String) || !(/[a-zA-Z]/ =~ l) || (l.empty?)
       raise ArgumentError.new("Guess must be a valid letter")
     end
     l.downcase!
@@ -39,10 +41,12 @@ class HangpersonGame
     end
     if @word.include? l
       @guesses += l
+      set_word_with_guesses
       @valid = true
       return true
     else
       @wrong_guesses += l
+      check_lose()
       @valid = true
       return true
     end
@@ -51,5 +55,26 @@ class HangpersonGame
   def guess_several_letters(ls)
     ls.split('').each do |l| guess(l) end
   end
+  
+  def set_word_with_guesses()
+    @word_with_guesses = ""
+    @word.split("").each do |l|
+      if @guesses.include? l
+        @word_with_guesses += l
+      else
+        @word_with_guesses += "-"
+      end
+    end
+    if @word_with_guesses == @word
+      @check_win_or_lose = :win
+    end
+  end
+  
+  def check_lose()
+    if @wrong_guesses.length == 7
+      @check_win_or_lose = :lose
+    end
+  end
+  
 
 end
